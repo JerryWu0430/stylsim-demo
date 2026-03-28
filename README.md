@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# StyleSim
+
+AI-powered fashion demand simulation tool that predicts clothing performance across diverse customer personas using Claude AI.
+
+## Overview
+
+StyleSim helps fashion brands and retailers make data-driven inventory decisions by simulating how different customer segments would respond to their clothing collection. Upload product images, select target personas, and receive detailed demand forecasts with buy intent scores and pricing insights.
+
+## Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| Framework | Next.js 16.2.1 |
+| Runtime | React 19 |
+| Language | TypeScript 5 |
+| Styling | Tailwind CSS 4 |
+| AI | Anthropic Claude SDK |
+| UI Components | shadcn/ui, Base UI |
+| Charts | Recharts |
+
+## Features
+
+- **Image Upload & Analysis** - Upload up to 20 clothing images; AI automatically identifies category, style, colors, materials, and price range
+- **Persona-Based Simulation** - Test against multiple customer archetypes (Gen Z, Millennial, Gen X) with distinct style preferences
+- **Demand Forecasting** - Get per-SKU scores, buy intent percentages, and risk assessments
+- **Actionable Insights** - Receive recommendations for production optimization and inventory planning
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── api/
+│   │   ├── analyze/     # Image analysis endpoint
+│   │   ├── simulate/    # Persona simulation endpoint
+│   │   └── upload/      # File upload endpoint
+│   ├── simulation/      # Persona selection page
+│   ├── results/         # Results dashboard page
+│   └── page.tsx         # Upload landing page
+├── components/
+│   ├── ui/              # shadcn components
+│   ├── upload/          # DropZone, ImageGrid
+│   ├── simulation/      # PersonaSelector, Progress
+│   └── results/         # Charts, Tables, Rankings
+├── context/
+│   └── SimulationContext.tsx
+├── lib/
+│   ├── claude.ts        # AI client
+│   ├── personas.ts      # Persona definitions
+│   ├── prompts.ts       # AI prompt templates
+│   └── analysis.ts      # Forecast logic
+└── types/
+    └── index.ts         # TypeScript interfaces
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+
+- Anthropic API key
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/JerryWu0430/stylesim.git
+cd stylesim
+
+# Install dependencies
+npm install
+
+# Configure environment
+cp .env.local.example .env.local
+# Add your ANTHROPIC_API_KEY to .env.local
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to access the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage Flow
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Upload** - Drag & drop clothing images
+2. **Analyze** - AI extracts style attributes automatically
+3. **Configure** - Select target customer personas
+4. **Simulate** - Run demand prediction across personas
+5. **Review** - Explore rankings, charts, and recommendations
 
-## Learn More
+## API Routes
 
-To learn more about Next.js, take a look at the following resources:
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/upload` | POST | Upload clothing images |
+| `/api/analyze` | POST | Analyze single image with Claude Vision |
+| `/api/simulate` | POST | Run persona-based demand simulation |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run dev      # Start development server
+npm run build    # Production build
+npm run start    # Start production server
+npm run lint     # Run ESLint
+```
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
