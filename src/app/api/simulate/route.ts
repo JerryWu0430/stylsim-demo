@@ -26,24 +26,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No valid personas found' }, { status: 400 });
     }
 
-    // Run simulations for each persona (with rate limiting)
+    // Run simulations for all personas in parallel
+    const results = await Promise.allSettled(
+      personas.map((persona) => runPersonaSimulation(persona, items))
+    );
+
     const allOpinions: PersonaOpinion[] = [];
-    const DELAY_MS = 500; // Rate limit delay between API calls
-
-    for (const persona of personas) {
-      try {
-        const opinions = await runPersonaSimulation(persona, items);
-        allOpinions.push(...opinions);
-
-        // Rate limit between calls
-        if (personas.indexOf(persona) < personas.length - 1) {
-          await new Promise((resolve) => setTimeout(resolve, DELAY_MS));
-        }
-      } catch (error) {
-        console.error(`Simulation failed for ${persona.name}:`, error);
-        // Continue with other personas even if one fails
+    results.forEach((result, i) => {
+      if (result.status === 'fulfilled') {
+        allOpinions.push(...result.value);
+      } else {
+        console.error(`Simulation failed for ${personas[i].name}:`, result.reason);
       }
-    }
+    });
 
     if (allOpinions.length === 0) {
       return NextResponse.json(
